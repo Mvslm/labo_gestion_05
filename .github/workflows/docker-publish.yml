@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  packages: write  # Ensure this is set to allow writing to the registry
+
 jobs:
   build:
     runs-on: ubuntu-latest
