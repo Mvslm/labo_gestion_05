@@ -24,6 +24,14 @@ jobs:
       run: |
         docker build -t ghcr.io/mvslm/ue19-lab-05:latest .
 
+    - name: Cache Trivy binary
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/trivy
+        key: ${{ runner.os }}-trivy-${{ hashFiles('**/Dockerfile') }}
+        restore-keys: |
+          ${{ runner.os }}-trivy-
+
     - name: Scan image for vulnerabilities
       uses: aquasecurity/trivy-action@master
       with:
@@ -32,6 +40,6 @@ jobs:
         severity: HIGH,CRITICAL
 
     - name: Push Docker image
-      if: success()  # Ne publie que si toutes les étapes précédentes réussissent
+      if: success()
       run: |
         docker push ghcr.io/mvslm/ue19-lab-05:latest
